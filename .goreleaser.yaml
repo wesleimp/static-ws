@@ -53,7 +53,7 @@ dockers:
   - "--label=org.opencontainers.image.source={{.GitURL}}"
   - "--platform=linux/amd64"
   extra_files:
-  - scripts/entrypoint.sh
+  - entrypoint.sh
 - image_templates:
   - 'wesleimp/static-ws:{{ .Tag }}-arm64'
   dockerfile: Dockerfile
@@ -68,7 +68,7 @@ dockers:
   - "--platform=linux/arm64"
   goarch: arm64
   extra_files:
-  - scripts/entrypoint.sh
+  - entrypoint.sh
 
 docker_manifests:
 - name_template: 'wesleimp/static-ws:{{ .Tag }}'
