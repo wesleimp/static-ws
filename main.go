@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/apex/log"
+	"github.com/apex/log/handlers/text"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/urfave/cli/v2"
@@ -40,9 +41,12 @@ func (s Server) Start() error {
 }
 
 func main() {
+	log.SetHandler(text.Default)
 	app := &cli.App{
-		Name:        "static-ws",
-		Description: "Serve static content",
+		Name:            "static-ws",
+		Usage:           "Serve static content",
+		ArgsUsage:       "<PATH>",
+		HideHelpCommand: true,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "port",
@@ -72,12 +76,23 @@ func run(c *cli.Context) error {
 	if args.Len() < 1 {
 		return errors.New("wrong number of arguments")
 	}
+	path := args.Get(0)
+
+	err := validatePath(path)
+	if err != nil {
+		return err
+	}
 
 	s := Server{
-		Path:  args.Get(0),
+		Path:  path,
 		Port:  c.String("port"),
 		Index: c.String("entrypoint"),
 	}
 
 	return s.Start()
+}
+
+func validatePath(p string) error {
+	_, err := os.Stat(p)
+	return err
 }
