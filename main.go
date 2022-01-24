@@ -14,6 +14,8 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+var version = "v0.1.0"
+
 type Server struct {
 	Port  string
 	Path  string
@@ -47,6 +49,7 @@ func main() {
 		Usage:           "Serve static content",
 		ArgsUsage:       "<PATH>",
 		HideHelpCommand: true,
+		Version:         version,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "port",
