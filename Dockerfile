@@ -1,15 +1,13 @@
-FROM golang:alpine AS base
+FROM golang:alpine
+
 WORKDIR /app
 
-# Go builder
-FROM base as builder
 COPY . .
-RUN go mod download
-RUN CGO_ENABLED=0 go build -a -installsuffix cgo -v -o static-server main.go
+RUN chmod +x ./entrypoint.sh
 
-FROM scratch as final
-WORKDIR /app
-COPY --from=builder /app/static-server /static-server
+RUN go mod download
+RUN CGO_ENABLED=0 go build -a -installsuffix cgo -v -o static-ws main.go
 
 EXPOSE 8080
-ENTRYPOINT ["./static-server"]
+
+ENTRYPOINT ["./entrypoint.sh"]

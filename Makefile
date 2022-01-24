@@ -28,7 +28,7 @@ build:
 
 ## docker-build: builds the docker image
 docker-build:
-	docker build -t static-ws .
+	docker build -t $(BIN_NAME):$(GIT_SUMMARY) .
 
 ## clean: cleans bin folder
 clean:

@@ -20,6 +20,8 @@ type Server struct {
 }
 
 func (s Server) Start() error {
+	gin.SetMode(gin.ReleaseMode)
+
 	router := gin.Default()
 	router.Use(static.Serve("/", static.LocalFile(s.Path, true)))
 
@@ -45,7 +47,7 @@ func main() {
 			&cli.StringFlag{
 				Name:    "port",
 				Usage:   "Application port address",
-				Aliases: []string{"P"},
+				Aliases: []string{"p"},
 				EnvVars: []string{"PORT"},
 				Value:   "8080",
 			},
@@ -67,7 +69,7 @@ func main() {
 
 func run(c *cli.Context) error {
 	args := c.Args()
-	if args.Len() != 1 {
+	if args.Len() < 1 {
 		return errors.New("wrong number of arguments")
 	}
 
