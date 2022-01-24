@@ -1,17 +1,13 @@
-FROM golang:1.17.6-alpine
+FROM golang:alpine
 
-RUN apk add --no-cache bash \
-	curl \
-	docker-cli \
-	docker-cli-buildx \
-	git \
-	mercurial \
-	make \
-	build-base
+WORKDIR /app
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY . .
+RUN chmod +x ./entrypoint.sh
 
-COPY static-ws /bin/static-ws
+RUN go mod download
+RUN CGO_ENABLED=0 go build -a -installsuffix cgo -v -o static-ws .
 
-ENTRYPOINT ["/entrypoint.sh"]
+EXPOSE 8080
+
+ENTRYPOINT ["./entrypoint.sh"]
