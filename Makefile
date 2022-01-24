@@ -3,6 +3,7 @@ GOARCH ?= amd64
 CGO_ENABLED ?= 1
 LDFLAGS += -s -w
 BIN_NAME ?= static-ws
+REPO ?= wesleimp/static-ws
 
 ifeq ($(NOGIT),1)
   GIT_SUMMARY ?= Unknown
@@ -28,7 +29,13 @@ build:
 
 ## docker-build: builds the docker image
 docker-build:
-	docker build -t $(BIN_NAME):$(GIT_SUMMARY) .
+	docker build -t $(REPO):$(GIT_SUMMARY) .
+	docker build -t $(REPO):latest .
+
+## docker-push: push images to docker hub
+docker-push:
+	docker push $(REPO):$(GIT_SUMMARY)
+	docker push $(REPO):latest
 
 ## clean: cleans bin folder
 clean:
