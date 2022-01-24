@@ -1,13 +1,10 @@
 FROM golang:alpine
 
-WORKDIR /app
+RUN apk add --no-cache bash curl docker-cli git mercurial make
 
-COPY . .
-RUN chmod +x ./entrypoint.sh
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-RUN go mod download
-RUN CGO_ENABLED=0 go build -a -installsuffix cgo -v -o static-ws main.go
+COPY static-ws /bin/static-ws
 
-EXPOSE 8080
-
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
